@@ -2,6 +2,10 @@
 
 Minor mode to cloak sensitive data
 
+## Motivation
+
+I used to use `hidepw` package but it only supports a plain list of regexs and also use font locking which have some conflicts with other packages, `cloak-mode` allows to setup a regex by major mode, which fits betters for my use case.
+
 ## Installation
 
 ### Cloning the repo
