@@ -16,7 +16,8 @@
 
 ;;; Code:
 (defcustom cloak-mode-patterns '()
-  "Define patterns per major mode to match values that should be cloaked."
+  "Define patterns per major mode to match values that should be cloaked.
+Patterns should only have one capturing group (\(\))."
   :group 'cloak-mode
   :type 'alist)
 
