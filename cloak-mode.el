@@ -15,7 +15,7 @@
 ;; Usage: For example if we want to add it to envrc files
 ;;   (require 'cloak-mode)
 ;;   (setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
-;;   (add-hook 'envrc-mode-hook 'cloak-mode)
+;;   (global-cloak-mode)
 
 ;;; Code:
 (defcustom cloak-mode-patterns '()
@@ -23,6 +23,11 @@
 Patterns should only have one capturing group (\(\))."
   :group 'cloak-mode
   :type 'alist)
+
+;;;###autoload
+(define-globalized-minor-mode global-cloak-mode
+  cloak-mode cloak--initialize
+  :group 'cloak-mode)
 
 (defcustom cloak-mode-mask "***"
   "Character used to hide values."
@@ -36,6 +41,11 @@ Patterns should only have one capturing group (\(\))."
   (if cloak-mode
       (cloak-mode--toggle t)
     (cloak-mode--toggle nil)))
+
+(defun cloak--initialize ()
+  "Enable `cloak-mode' in the current buffer, if appropriate."
+  (if (assq major-mode cloak-mode-patterns)
+      (cloak-mode)))
 
 (defun cloak-mode--toggle (flag)
   "Run cloaking at current buffer depending of the given FLAG."

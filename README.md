@@ -18,7 +18,7 @@ Clone this repo somewhere, and add this to your config:
 ;; for example we load it for envrc files
 (require 'cloak-mode)
 (setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
-(add-hook 'envrc-mode-hook 'cloak-mode)
+(global-cloak-mode)
 ```
 
 ### Using straight.el
