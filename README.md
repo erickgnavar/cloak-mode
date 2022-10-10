@@ -32,5 +32,7 @@ Clone this repo somewhere, and add this to your config:
   :straight (cloak-mode
              :type git
              :host github
-             :repo "erickgnavar/cloak-mode"))
+             :repo "erickgnavar/cloak-mode")
+  :config
+  (global-cloak-mode))
 ```
