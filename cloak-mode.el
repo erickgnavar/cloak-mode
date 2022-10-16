@@ -24,11 +24,6 @@ Patterns should only have one capturing group (\(\))."
   :group 'cloak-mode
   :type 'alist)
 
-;;;###autoload
-(define-globalized-minor-mode global-cloak-mode
-  cloak-mode cloak--initialize
-  :group 'cloak-mode)
-
 (defcustom cloak-mode-mask "***"
   "Character used to hide values."
   :group 'cloak-mode
@@ -41,6 +36,11 @@ Patterns should only have one capturing group (\(\))."
   (if cloak-mode
       (cloak-mode--toggle t)
     (cloak-mode--toggle nil)))
+
+;;;###autoload
+(define-globalized-minor-mode global-cloak-mode
+  cloak-mode cloak--initialize
+  :group 'cloak-mode)
 
 (defun cloak--initialize ()
   "Enable `cloak-mode' in the current buffer, if appropriate."
