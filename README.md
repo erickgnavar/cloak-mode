@@ -1,4 +1,6 @@
-# cloak-mode
+# Cloak-mode
+
+[![MELPA](https://melpa.org/packages/cloak-mode-badge.svg)](https://melpa.org/#/cloak-mode)
 
 Minor mode to cloak sensitive data
 
@@ -23,6 +25,15 @@ Clone this repo somewhere, and add this to your config:
 (require 'cloak-mode)
 (setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
 (global-cloak-mode)
+```
+
+### Using use-package
+
+```emacs-lisp
+(use-package cloak-mode
+  :ensure t
+  :config
+  (global-cloak-mode))
 ```
 
 ### Using straight.el
