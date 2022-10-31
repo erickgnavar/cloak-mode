@@ -58,10 +58,10 @@ Patterns should only have one capturing group (\(\))."
 
 (defun cloak-mode--cloak-text (start end cloak)
   "Cloak text between START and END and replace it with *.
-if CLOAK is nil cloaking property will be removed."
+if CLOAK is nil cloaking overlay will be removed."
   (if cloak
-      (put-text-property start end 'display cloak-mode-mask)
-    (remove-text-properties start end '(display))))
+      (overlay-put (make-overlay start end) 'display cloak-mode-mask)
+    (remove-overlays start end)))
 
 (provide 'cloak-mode)
 ;;; cloak-mode.el ends here
