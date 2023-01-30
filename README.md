@@ -47,3 +47,21 @@ Clone this repo somewhere, and add this to your config:
   :config
   (global-cloak-mode))
 ```
+
+## Examples
+
+### Single pattern per mode
+
+In case we need just one pattern we can define directly as a string
+
+```elisp
+(setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
+```
+
+### Many patterns per mode
+
+In case we need many patterns we can define a list of strings
+
+```elisp
+(setq cloak-mode-patterns '((envrc-file-mode . ("first-pattern" "second pattern"))))
+```

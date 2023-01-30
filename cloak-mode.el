@@ -49,12 +49,16 @@ Patterns should only have one capturing group (\(\))."
 
 (defun cloak-mode--toggle (flag)
   "Run cloaking at current buffer depending of the given FLAG."
-  (when-let ((regex (cdr (assq major-mode cloak-mode-patterns))))
+  (when-let ((raw-regex (cdr (assq major-mode cloak-mode-patterns)))
+             ;; We need to iterate over a list of regex so we need to create a list
+             ;; in case the defined value is a single regex
+             (regex-list (if (listp raw-regex) raw-regex (list raw-regex))))
     (save-excursion
-      (goto-char (point-min))
-      (while (search-forward-regexp regex (point-max) t)
-        (if (match-string 1)
-            (cloak-mode--cloak-text (match-beginning 1) (match-end 1) flag))))))
+      (dolist (regex regex-list)
+        (goto-char (point-min))
+        (while (search-forward-regexp regex (point-max) t)
+          (if (match-string 1)
+              (cloak-mode--cloak-text (match-beginning 1) (match-end 1) flag)))))))
 
 (defun cloak-mode--cloak-text (start end cloak)
   "Cloak text between START and END and replace it with *.
