@@ -72,8 +72,12 @@ Keys can be a major mode symbol (e.g., `envrc-file-mode') or a buffer name strin
   "Cloak text between START and END and replace it with *.
 if CLOAK is nil cloaking overlay will be removed."
   (if cloak
-      (overlay-put (make-overlay start end) 'display cloak-mode-mask)
-    (remove-overlays start end)))
+      (let ((ov (make-overlay start end)))
+        (overlay-put ov 'display cloak-mode-mask)
+        (overlay-put ov 'cloak-mode t))
+    (dolist (ov (overlays-in start end))
+      (when (overlay-get ov 'cloak-mode)
+        (delete-overlay ov)))))
 
 (provide 'cloak-mode)
 ;;; cloak-mode.el ends here
