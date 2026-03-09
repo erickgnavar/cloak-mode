@@ -8,19 +8,25 @@
 ;; Package-Requires: ((emacs "27.1"))
 
 ;;; Commentary:
-;; Hide sensitive using pre defined regex patterns per major mode.
-;; It allows to define specific regex per each major mode where we want to hide
-;; sensitive data
+;; Hide sensitive using pre defined regex patterns per major mode or buffer name.
+;; It allows to define specific regex per each major mode or buffer name where we
+;; want to hide sensitive data
 
 ;; Usage: For example if we want to add it to envrc files
 ;;   (require 'cloak-mode)
 ;;   (setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
 ;;   (global-cloak-mode)
+;;
+;; Or for a buffer by name:
+;;   (require 'cloak-mode)
+;;   (setq cloak-mode-patterns '(("*scratch*" . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
+;;   (global-cloak-mode)
 
 ;;; Code:
 (defcustom cloak-mode-patterns '()
-  "Define patterns per major mode to match values that should be cloaked.
-Patterns should only have one capturing group (\(\))."
+  "Define patterns per major mode or buffer name to match values that should be cloaked.
+Patterns should only have one capturing group (\\(\\)).
+Keys can be a major mode symbol (e.g., `envrc-file-mode') or a buffer name string."
   :group 'cloak-mode
   :type 'alist)
 
@@ -31,7 +37,7 @@ Patterns should only have one capturing group (\(\))."
 
 ;;;###autoload
 (define-minor-mode cloak-mode
-  "Cloak values using a pattern per major mode."
+  "Cloak values using a pattern per major mode or buffer name."
   :lighter " Cloak"
   (if cloak-mode
       (cloak-mode--toggle t)
@@ -44,12 +50,14 @@ Patterns should only have one capturing group (\(\))."
 
 (defun cloak--initialize ()
   "Enable `cloak-mode' in the current buffer, if appropriate."
-  (if (assq major-mode cloak-mode-patterns)
-      (cloak-mode)))
+  (when (or (assq major-mode cloak-mode-patterns)
+            (assoc (buffer-name) cloak-mode-patterns))
+    (cloak-mode)))
 
 (defun cloak-mode--toggle (flag)
   "Run cloaking at current buffer depending of the given FLAG."
-  (when-let ((raw-regex (cdr (assq major-mode cloak-mode-patterns)))
+  (when-let ((raw-regex (or (cdr (assq major-mode cloak-mode-patterns))
+                            (cdr (assoc (buffer-name) cloak-mode-patterns))))
              ;; We need to iterate over a list of regex so we need to create a list
              ;; in case the defined value is a single regex
              (regex-list (if (listp raw-regex) raw-regex (list raw-regex))))

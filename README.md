@@ -25,6 +25,11 @@ Clone this repo somewhere, and add this to your config:
 (require 'cloak-mode)
 (setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
 (global-cloak-mode)
+
+;; or for a buffer by name
+(require 'cloak-mode)
+(setq cloak-mode-patterns '(("*scratch*" . "[a-zA-Z0-9_]+[ \t]*=[ \t]*\\(.*+\\)$")))
+(global-cloak-mode)
 ```
 
 ### Using use-package
@@ -64,4 +69,20 @@ In case we need many patterns we can define a list of strings
 
 ```elisp
 (setq cloak-mode-patterns '((envrc-file-mode . ("first-pattern" "second pattern"))))
+```
+
+### Buffer name matching
+
+You can also match buffers by name (useful for special buffers like `*scratch*` or `*Messages*`):
+
+```elisp
+;; Match specific buffer names
+(setq cloak-mode-patterns '(("*scratch*" . "[a-zA-Z0-9_]+=\\(.*\\)")))
+
+;; Mixed: major mode and buffer name
+(setq cloak-mode-patterns '((envrc-file-mode . "[a-zA-Z0-9_]+=[ \t]*\\(.*\\)$")
+                            ("*scratch*" . "[a-zA-Z0-9_]+=\\(.*\\)")))
+
+;; Multiple patterns per buffer name
+(setq cloak-mode-patterns '(("*scratch*" . ("pattern1" "pattern2"))))
 ```
